@@ -9,6 +9,16 @@ requirements:
   skip: false
   conda:
     channels:
+      - conda-forge
     packages:
+      - xarray
+      - netcdf4
+      - numpy
+      - pandas
+      - python-crontab
+      - pytz
+      - scipy
+      - sqlalchemy
+      - tethys_dataset_services
   pip:
 post:

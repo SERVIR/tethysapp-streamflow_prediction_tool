@@ -13,17 +13,7 @@ release_package = 'tethysapp-' + app_package
 resource_files = find_resource_files('tethysapp/' + app_package + '/templates', 'tethysapp/' + app_package)
 resource_files += find_resource_files('tethysapp/' + app_package + '/public', 'tethysapp/' + app_package)
 # App Packages
-dependencies = [
-    'xarray',
-    'netcdf4',
-    'numpy',
-    'pandas',
-    'python-crontab',
-    'pytz',
-    'scipy',
-    'sqlalchemy',
-    'tethys_dataset_services',
-]
+dependencies = []
 
 
 def _path_to_download_script():
