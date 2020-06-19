@@ -1,28 +1,19 @@
-"""
-Setup script for the Streamflow Prediction Tool web application.
-
-Author: Alan D. Snow, 2015-2017
-License: BSD-3-Clause
-"""
-# pylint: disable=attribute-defined-outside-init,no-self-use
-import os
-import sys
-
-from setuptools import setup, find_packages
-from setuptools import Command
-
+from setuptools import setup, find_namespace_packages
+from tethys_apps.app_installation import find_resource_files
 from tethys_apps.app_installation import (custom_develop_command,
                                           custom_install_command)
-
-# Apps Definition
-APP_PACKAGE = 'streamflow_prediction_tool'
-RELEASE_PACKAGE = 'tethysapp-' + APP_PACKAGE
-APP_CLASS = 'streamflow_prediction_tool.app:StreamflowPredictionTool'
+import os
+import sys
+### Apps Definition ###
+app_package = 'streamflow_prediction_tool'
 APP_PACKAGE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                'tethysapp',
-                               APP_PACKAGE)
+                               app_package)
+release_package = 'tethysapp-' + app_package
+resource_files = find_resource_files('tethysapp/' + app_package + '/templates', 'tethysapp/' + app_package)
+resource_files += find_resource_files('tethysapp/' + app_package + '/public', 'tethysapp/' + app_package)
 # App Packages
-DEPENDENCIES = [
+dependencies = [
     'xarray',
     'netcdf4',
     'numpy',
@@ -114,7 +105,7 @@ class SetupCrontabCommand(Command):
 
 
 setup(
-    name=RELEASE_PACKAGE,
+    name=release_package,
     version='1.1.0',
     description=('Provides 15-day streamflow predicted estimates by using '
                  'ECMWF (ecmwf.int) runoff predictions routed with the RAPID '
@@ -126,33 +117,23 @@ setup(
     author_email='alan.d.snow@usace.army.mil',
     url='https://github.com/erdc-cm/tethysapp-streamflow_prediction_tool',
     license='BSD 3-Clause',
-    packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
-    namespace_packages=['tethysapp', 'tethysapp.' + APP_PACKAGE],
+    packages=find_namespace_packages(),
+    namespace_packages=['tethysapp', 'tethysapp.' + app_package],
+    package_data={'': resource_files},
     include_package_data=True,
-    extras_require={
-        'tests': [
-            'flake8',
-            'pylint',
-        ],
-        'docs': [
-            'sphinx',
-            'sphinx_rtd_theme',
-            'sphinxcontrib-napoleon',
-        ]
-    },
     zip_safe=False,
-    install_requires=DEPENDENCIES,
-    cmdclass={
-        'install': custom_install_command(
-            APP_PACKAGE,
-            APP_PACKAGE_DIR,
-            DEPENDENCIES
-        ),
-        'develop': custom_develop_command(
-            APP_PACKAGE,
-            APP_PACKAGE_DIR,
-            DEPENDENCIES
-        ),
-        'cron': SetupCrontabCommand,
-    }
+    install_requires=dependencies,
+    # cmdclass={
+    #     'install': custom_install_command(
+    #         app_package,
+    #         APP_PACKAGE_DIR,
+    #         dependencies
+    #     ),
+    #     'develop': custom_develop_command(
+    #         app_package,
+    #         APP_PACKAGE_DIR,
+    #         dependencies
+    #     ),
+    #     'cron': SetupCrontabCommand,
+    # }
 )
